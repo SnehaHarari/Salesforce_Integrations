@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | LuxeJoyas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { gold: '#D4AF37', goldHover: '#B5952F', dark: '#1a1a1a' },
+                    fontFamily: { sans: ['Lato', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-dark font-sans">
+
+    <header class="fixed w-full z-50 bg-white shadow-sm border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex-shrink-0">
+                <h1 class="font-serif text-2xl font-bold tracking-widest">LUXE<span class="text-gold">JOYAS</span></h1>
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="index.html" class="text-sm font-medium hover:text-gold transition">Home</a>
+                <a href="collection.html" class="text-sm font-medium hover:text-gold transition">Collection</a>
+            </nav>
+            <div class="flex items-center space-x-6">
+                <a href="login.html" class="text-gold"><i class="fas fa-user"></i></a>
+                <a href="cart.html" class="hover:text-gold transition relative">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="min-h-screen flex items-center justify-center pt-20 px-4">
+        <div class="bg-white p-8 shadow-lg w-full max-w-md border border-gray-200">
+            <h2 class="font-serif text-2xl text-center mb-8">Welcome Back</h2>
+            <form id="login-form" onsubmit="processLogin(event)">
+    <div class="mb-4">
+        <label class="block text-sm mb-1">Email</label>
+        <input type="email" id="login-email" required class="w-full border p-2">
+    </div>
+    <div class="mb-6">
+        <label class="block text-sm mb-1">Password</label>
+        <input type="password" id="login-pass" required class="w-full border p-2">
+    </div>
+    <button type="submit" class="w-full bg-dark text-white py-2">Login</button>
+    <p id="error-msg" class="text-red-500 text-xs mt-4 text-center hidden"></p>
+</form>
+            <p class="mt-6 text-center text-sm text-gray-500">
+                Don't have an account? <a href="signup.html" class="text-gold font-bold">Sign Up</a>
+            </p>
+        </div>
+    </main>
+
+    <script src="main.js"></script>
+    <script>
+    function processLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const pass = document.getElementById('login-pass').value;
+        const errorEl = document.getElementById('error-msg');
+
+        try {
+            handleLogin(email, pass);
+        } catch (err) {
+            errorEl.textContent = err.message;
+            errorEl.classList.remove('hidden');
+        }
+    }
+</script>
+</body>
+</html>
