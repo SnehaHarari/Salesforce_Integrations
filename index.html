@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuxeJoyas | Fine Jewelry</title>
+    <title>Joya | Fine Jewelry</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,12 +17,27 @@
             }
         }
     </script>
+    <script src="main.js"></script>
     <style>
-        html { scroll-behavior: smooth; }
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .page { display: none; }
-        .page.active { display: block; }
+        #toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #1a1a1a;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1000;
+    right: 30px;
+    bottom: 30px;
+}
+#toast.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+@keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+@keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
     </style>
 </head>
 <body class="bg-white text-dark font-sans">
@@ -30,340 +45,75 @@
     <!-- HEADER -->
     <header class="fixed w-full z-50 bg-white shadow-sm border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
-            <div class="flex-shrink-0 cursor-pointer" onclick="router('home')">
-                <h1 class="font-serif text-2xl font-bold tracking-widest">LUXE<span class="text-gold">JOYAS</span></h1>
-            </div>
+            <a href="index.html" class="flex-shrink-0">
+                <h1 class="font-serif text-2xl font-bold tracking-widest"><span class="text-gold">JOYA</span></h1>
+            </a>
             <nav class="hidden md:flex space-x-8">
-                <a href="#" onclick="router('home')" class="text-sm font-medium hover:text-gold transition">Home</a>
-                <a href="#" onclick="router('collection')" class="text-sm font-medium hover:text-gold transition">Collection</a>
-                <a href="#" onclick="router('contact')" class="text-sm font-medium hover:text-gold transition">Contact</a>
+                <a href="index.html" class="text-sm font-medium hover:text-gold transition">Home</a>
+                <a href="collection.html" class="text-sm font-medium hover:text-gold transition">Collection</a>
             </nav>
             <div class="flex items-center space-x-6">
-                <div class="relative hidden sm:block">
-                    <input type="text" id="search-input" placeholder="Search..." class="pl-8 pr-2 py-1 border-b border-gray-300 focus:border-gold focus:outline-none text-sm w-32 transition-all">
-                    <i class="fas fa-search absolute left-0 top-1.5 text-gray-400 text-xs"></i>
-                </div>
-                <button onclick="router('login')" id="auth-btn" class="hover:text-gold transition">
-                    <i class="fas fa-user"></i>
-                </button>
-                <button onclick="router('cart')" class="hover:text-gold transition relative">
+                <a href="login.html" class="hover:text-gold transition"><i class="fas fa-user"></i></a>
+                <a href="cart.html" class="hover:text-gold transition relative">
                     <i class="fas fa-shopping-bag"></i>
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
-                </button>
+                </a>
             </div>
         </div>
+        <div id="toast">Item added to cart!</div>
     </header>
 
-    <main class="pt-20 min-h-screen">
-
-        <!-- HOME PAGE -->
-        <div id="home" class="page active">
-            <section class="relative h-[80vh] flex items-center justify-center bg-gray-100 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&w=1920&q=80" class="absolute w-full h-full object-cover">
-                <div class="absolute inset-0 bg-black/30"></div>
-                <div class="relative z-10 text-center text-white">
-                    <p class="uppercase tracking-[0.3em] text-sm mb-4">Redefining Luxury</p>
-                    <h1 class="font-serif text-5xl md:text-7xl mb-8">Timeless <span class="text-gold">Beauty</span></h1>
-                    <button onclick="router('collection')" class="px-10 py-3 bg-gold text-white font-medium hover:bg-goldHover transition uppercase tracking-widest text-sm">Shop Now</button>
-                </div>
-            </section>
-
-            <section class="py-20 max-w-7xl mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="font-serif text-3xl">Browse Categories</h2>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div onclick="router('collection'); setTimeout(()=>filterProducts('Rings'),100)" class="group cursor-pointer text-center">
-                        <div class="h-64 bg-gray-100 mb-4 overflow-hidden relative">
-                            <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition"></div>
-                        </div>
-                        <h3 class="font-serif text-lg">Rings</h3>
-                    </div>
-                    <div onclick="router('collection'); setTimeout(()=>filterProducts('Earrings'),100)" class="group cursor-pointer text-center">
-                        <div class="h-64 bg-gray-100 mb-4 overflow-hidden relative">
-                            <img src="https://images.unsplash.com/photo-1535632787354-4e68ef0ac584?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        </div>
-                        <h3 class="font-serif text-lg">Earrings</h3>
-                    </div>
-                    <div onclick="router('collection'); setTimeout(()=>filterProducts('Necklaces'),100)" class="group cursor-pointer text-center">
-                        <div class="h-64 bg-gray-100 mb-4 overflow-hidden relative">
-                            <img src="https://images.unsplash.com/photo-1599643477877-530eb63abc9e?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        </div>
-                        <h3 class="font-serif text-lg">Necklaces</h3>
-                    </div>
-                    <div onclick="router('collection'); setTimeout(()=>filterProducts('Bracelets'),100)" class="group cursor-pointer text-center">
-                        <div class="h-64 bg-gray-100 mb-4 overflow-hidden relative">
-                            <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        </div>
-                        <h3 class="font-serif text-lg">Bracelets</h3>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- COLLECTION PAGE -->
-        <div id="collection" class="page">
-            <div class="max-w-7xl mx-auto px-4 py-12">
-                <div class="flex flex-col md:flex-row gap-8">
-                    <div class="w-full md:w-1/4">
-                        <div class="bg-gray-50 p-6">
-                            <h3 class="font-serif text-xl mb-6">Filters</h3>
-                            <div class="mb-8">
-                                <h4 class="font-bold text-sm uppercase tracking-wider mb-3 text-gray-500">Category</h4>
-                                <div class="space-y-2">
-                                    <label class="flex items-center space-x-2 cursor-pointer">
-                                        <input type="radio" name="category" checked class="accent-gold" onchange="filterProducts('All')"><span class="text-sm">All Products</span>
-                                    </label>
-                                    <label class="flex items-center space-x-2 cursor-pointer">
-                                        <input type="radio" name="category" class="accent-gold" onchange="filterProducts('Rings')"><span class="text-sm">Rings</span>
-                                    </label>
-                                    <label class="flex items-center space-x-2 cursor-pointer">
-                                        <input type="radio" name="category" class="accent-gold" onchange="filterProducts('Necklaces')"><span class="text-sm">Necklaces</span>
-                                    </label>
-                                    <label class="flex items-center space-x-2 cursor-pointer">
-                                        <input type="radio" name="category" class="accent-gold" onchange="filterProducts('Earrings')"><span class="text-sm">Earrings</span>
-                                    </label>
-                                    <label class="flex items-center space-x-2 cursor-pointer">
-                                        <input type="radio" name="category" class="accent-gold" onchange="filterProducts('Bracelets')"><span class="text-sm">Bracelets</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-full md:w-3/4">
-                        <div class="flex justify-between items-center mb-6">
-                            <h2 id="collection-title" class="font-serif text-3xl">All Collections</h2>
-                            <span class="text-gray-500 text-sm" id="product-count">0 items</span>
-                        </div>
-                        <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-                    </div>
-                </div>
+    <!-- HERO SECTION -->
+    <main class="pt-20">
+        <section class="relative h-[80vh] flex items-center justify-center bg-gray-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&w=1920&q=80" class="absolute w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/30"></div>
+            <div class="relative z-10 text-center text-white">
+                <p class="uppercase tracking-[0.3em] text-sm mb-4">Redefining Luxury</p>
+                <h1 class="font-serif text-5xl md:text-7xl mb-8">Timeless <span class="text-gold">Beauty</span></h1>
+                <a href="collection.html" class="px-10 py-3 bg-gold text-white font-medium hover:bg-goldHover transition uppercase tracking-widest text-sm inline-block">Shop Now</a>
             </div>
-        </div>
+        </section>
 
-        <!-- LOGIN PAGE -->
-        <div id="login" class="page">
-            <div class="max-w-md mx-auto px-4 py-20">
-                <div class="bg-white border border-gray-200 p-8 shadow-lg">
-                    <div class="flex justify-center mb-8">
-                        <button id="btn-show-login" class="px-4 py-2 border-b-2 border-gold font-serif text-xl mr-4" onclick="toggleAuth('login')">Login</button>
-                        <button id="btn-show-signup" class="px-4 py-2 border-b-2 border-transparent text-gray-400 font-serif text-xl" onclick="toggleAuth('signup')">Sign Up</button>
-                    </div>
-                    <form id="login-form" onsubmit="handleLogin(event)">
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium mb-1">Email</label>
-                            <input type="email" id="login-email" required class="w-full border border-gray-300 p-2 focus:border-gold focus:outline-none">
-                        </div>
-                        <div class="mb-6">
-                            <label class="block text-sm font-medium mb-1">Password</label>
-                            <input type="password" id="login-pass" required class="w-full border border-gray-300 p-2 focus:border-gold focus:outline-none">
-                        </div>
-                        <button type="submit" class="w-full bg-dark text-white py-2 hover:bg-gold transition">Login</button>
-                    </form>
-                    <form id="signup-form" class="hidden" onsubmit="handleSignup(event)">
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium mb-1">Full Name</label>
-                            <input type="text" id="signup-name" required class="w-full border border-gray-300 p-2 focus:border-gold focus:outline-none">
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium mb-1">Email</label>
-                            <input type="email" id="signup-email" required class="w-full border border-gray-300 p-2 focus:border-gold focus:outline-none">
-                        </div>
-                        <div class="mb-6">
-                            <label class="block text-sm font-medium mb-1">Password</label>
-                            <input type="password" id="signup-pass" required class="w-full border border-gray-300 p-2 focus:border-gold focus:outline-none">
-                        </div>
-                        <button type="submit" class="w-full bg-dark text-white py-2 hover:bg-gold transition">Create Account</button>
-                    </form>
-                    <p id="auth-message" class="mt-4 text-center text-sm text-red-500 hidden"></p>
-                </div>
+        <!-- CATEGORY PREVIEW -->
+        <section class="py-20 max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="font-serif text-3xl">Browse Categories</h2>
             </div>
-        </div>
-
-        <!-- CART PAGE -->
-        <div id="cart" class="page">
-            <div class="max-w-7xl mx-auto px-4 py-12">
-                <h2 class="font-serif text-3xl mb-8">Shopping Cart</h2>
-                <div class="flex flex-col lg:flex-row gap-12">
-                    <div class="w-full lg:w-2/3">
-                        <div id="cart-items" class="space-y-6">
-                            <p class="text-gray-500 text-center py-10">Your cart is empty.</p>
-                        </div>
-                    </div>
-                    <div class="w-full lg:w-1/3">
-                        <div class="bg-gray-50 p-6 sticky top-24">
-                            <h3 class="font-serif text-xl mb-4">Order Summary</h3>
-                            <div class="flex justify-between mb-2 text-sm">
-                                <span>Subtotal</span>
-                                <span id="cart-subtotal">$0.00</span>
-                            </div>
-                            <div class="flex justify-between mb-2 text-sm">
-                                <span>Shipping</span>
-                                <span>Free</span>
-                            </div>
-                            <div class="flex justify-between mb-2 text-sm">
-                                <span>Tax</span>
-                                <span id="cart-tax">$0.00</span>
-                            </div>
-                            <div class="border-t border-gray-300 my-4"></div>
-                            <div class="flex justify-between mb-6 text-xl font-serif">
-                                <span>Total</span>
-                                <span id="cart-total">$0.00</span>
-                            </div>
-                            <button onclick="checkout()" class="w-full bg-gold text-white py-3 hover:bg-goldHover transition uppercase tracking-wider">Checkout</button>
-                            <div class="mt-6 text-center text-gray-400 text-xs">
-                                <i class="fas fa-lock mr-1"></i> Secure Checkout
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Links to collection page -->
+                <a href="collection.html?category=Rings" class="group cursor-pointer text-center">
+                    <div class="h-64 bg-gray-100 mb-4 overflow-hidden relative"><img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"></div>
+                    <h3 class="font-serif text-lg">Rings</h3>
+                </a>
+                <a href="collection.html?category=Earrings" class="group cursor-pointer text-center">
+                    <div class="h-64 bg-gray-100 mb-4 overflow-hidden relative"><img src="https://images.unsplash.com/photo-1535632787354-4e68ef0ac584?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"></div>
+                    <h3 class="font-serif text-lg">Earrings</h3>
+                </a>
+                <a href="collection.html?category=Necklaces" class="group cursor-pointer text-center">
+                    <div class="h-64 bg-gray-100 mb-4 overflow-hidden relative"><img src="https://images.unsplash.com/photo-1599643477877-530eb63abc9e?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"></div>
+                    <h3 class="font-serif text-lg">Necklaces</h3>
+                </a>
+                <a href="collection.html?category=Bracelets" class="group cursor-pointer text-center">
+                    <div class="h-64 bg-gray-100 mb-4 overflow-hidden relative"><img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"></div>
+                    <h3 class="font-serif text-lg">Bracelets</h3>
+                </a>
             </div>
-        </div>
-
+            
+        </section>
     </main>
 
-    <!-- FOOTER -->
+    <!-- FOOTER (Keep consistent across all pages) -->
     <footer class="bg-dark text-white pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-                <div>
-                    <h3 class="font-serif text-2xl font-bold mb-6">LUXE<span class="text-gold">JOYAS</span></h3>
-                    <p class="text-gray-400 text-sm">Crafting memories since 1990.</p>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4 uppercase text-xs tracking-wider text-gold">Shop</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" onclick="router('collection')">All Jewelry</a></li>
-                        <li><a href="#">New Arrivals</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4 uppercase text-xs tracking-wider text-gold">Support</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Shipping</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4 uppercase text-xs tracking-wider text-gold">Newsletter</h4>
-                    <div class="flex">
-                        <input type="email" placeholder="Email" class="bg-gray-800 px-4 py-2 w-full focus:outline-none">
-                        <button class="bg-gold px-4 py-2"><i class="fas fa-arrow-right"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-xs">
-                &copy; 2023 LuxeJoyas. All rights reserved.
-            </div>
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500 text-xs">
+            &copy; 2026 LuxeJoyas. All rights reserved.
         </div>
     </footer>
 
-    <!-- JAVASCRIPT LOGIC -->
-<script>
-const products = [
-    { id: 1, name: "Diamond Halo Ring", price: 1200, category: "Rings", image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=80" },
-    { id: 2, name: "Gold Chain Pendant", price: 450, category: "Necklaces", image: "https://images.unsplash.com/photo-1599643477877-530eb63abc9e?auto=format&fit=crop&w=800&q=80" },
-    { id: 3, name: "Pearl Drop Earrings", price: 220, category: "Earrings", image: "https://images.unsplash.com/photo-1535632787354-4e68ef0ac584?auto=format&fit=crop&w=800&q=80" },
-    { id: 4, name: "Sapphire Tennis Bracelet", price: 800, category: "Bracelets", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=800&q=80" },
-    { id: 5, name: "Emerald Cut Ring", price: 1500, category: "Rings", image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=80" },
-    { id: 6, name: "Rose Gold Locket", price: 350, category: "Necklaces", image: "https://images.unsplash.com/photo-1599643477877-530eb63abc9e?auto=format&fit=crop&w=800&q=80" },
-    { id: 7, name: "Diamond Stud Earrings", price: 500, category: "Earrings", image: "https://images.unsplash.com/photo-1535632787354-4e68ef0ac584?auto=format&fit=crop&w=800&q=80" },
-    { id: 8, name: "Gold Cuff Bracelet", price: 600, category: "Bracelets", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=800&q=80" }
-];
-
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-// --- ROUTER ---
-function router(page) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(page).classList.add('active');
-    if (page === 'collection') renderProducts(products);
-    if (page === 'cart') renderCart();
-}
-
-// --- PRODUCT & FILTERING ---
-function filterProducts(category) {
-    const filtered = category === 'All' ? products : products.filter(p => p.category === category);
-    renderProducts(filtered, category);
-}
-
-function renderProducts(items, category = 'All') {
-    const list = document.getElementById('product-list');
-    document.getElementById('collection-title').textContent = category === 'All' ? 'All Collections' : category;
-    document.getElementById('product-count').textContent = `${items.length} items`;
-    
-    list.innerHTML = items.map(p => `
-        <div class="border p-4 group">
-            <img src="${p.image}" class="w-full h-64 object-cover mb-4">
-            <h3 class="font-bold font-serif">${p.name}</h3>
-            <p class="text-gold mb-4">$${p.price.toLocaleString()}</p>
-            <button onclick="addToCart(${p.id})" class="w-full bg-dark text-white py-2 hover:bg-gold transition text-sm">Add to Cart</button>
-        </div>
-    `).join('');
-}
-
-// --- CART LOGIC ---
-function addToCart(id) {
-    const product = products.find(p => p.id === id);
-    cart.push(product);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
-    alert(product.name + " added to cart!");
-}
-
-function updateCartCount() {
-    document.getElementById('cart-count').textContent = cart.length;
-}
-
-function renderCart() {
-    const container = document.getElementById('cart-items');
-    if (cart.length === 0) {
-        container.innerHTML = '<p class="text-gray-500 text-center py-10">Your cart is empty.</p>';
-    } else {
-        container.innerHTML = cart.map((p, index) => `
-            <div class="flex items-center justify-between border-b pb-4">
-                <div class="flex items-center gap-4">
-                    <img src="${p.image}" class="w-16 h-16 object-cover">
-                    <span>${p.name}</span>
-                </div>
-                <span class="font-bold">$${p.price.toLocaleString()}</span>
-                <button onclick="removeFromCart(${index})" class="text-red-500">Remove</button>
-            </div>
-        `).join('');
-    }
-    calculateTotals();
-}
-
-function removeFromCart(index) {
-    cart.splice(index, 1);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
-    renderCart();
-}
-
-function calculateTotals() {
-    const subtotal = cart.reduce((sum, p) => sum + p.price, 0);
-    const tax = subtotal * 0.08;
-    document.getElementById('cart-subtotal').textContent = `$${subtotal.toLocaleString()}`;
-    document.getElementById('cart-tax').textContent = `$${tax.toFixed(2)}`;
-    document.getElementById('cart-total').textContent = `$${(subtotal + tax).toLocaleString()}`;
-}
-
-// --- AUTH LOGIC ---
-function toggleAuth(type) {
-    document.getElementById('login-form').classList.toggle('hidden', type !== 'login');
-    document.getElementById('signup-form').classList.toggle('hidden', type !== 'signup');
-    document.getElementById('btn-show-login').className = type === 'login' ? "px-4 py-2 border-b-2 border-gold font-serif text-xl mr-4" : "px-4 py-2 border-b-2 border-transparent text-gray-400 font-serif text-xl";
-    document.getElementById('btn-show-signup').className = type === 'signup' ? "px-4 py-2 border-b-2 border-gold font-serif text-xl" : "px-4 py-2 border-b-2 border-transparent text-gray-400 font-serif text-xl";
-}
-
-function handleLogin(e) { e.preventDefault(); alert("Login simulated."); }
-function handleSignup(e) { e.preventDefault(); alert("Signup simulated."); }
-function checkout() { alert("Proceeding to checkout..."); }
-
-// Initialize
-updateCartCount();
-</script>
+    <script>
+        // Simple script to update cart count from localStorage
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        document.getElementById('cart-count').textContent = cart.length;
+    </script>
 </body>
 </html>

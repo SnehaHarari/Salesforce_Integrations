@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping Cart | LuxeJoyas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+       #toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #1a1a1a;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1000;
+    right: 30px;
+    bottom: 30px;
+}
+#toast.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+@keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+@keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    </style>
+</head>
+<body class="bg-white text-dark font-sans">
+    
+    <header class="h-20 shadow-sm border-b border-gray-100 flex items-center justify-between px-8">
+        <a href="index.html"><h1 class="font-serif text-2xl font-bold">LUXE<span class="text-gold">JOYAS</span></h1></a>
+        <nav class="space-x-8">
+            <a href="index.html">Home</a>
+            <a href="collection.html">Collection</a>
+            <a href="cart.html" class="text-gold font-bold">Cart (<span id="cart-count">0</span>)</a>
+        </nav>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-12">
+        <h2 class="font-serif text-3xl mb-8">Shopping Cart</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div id="cart-items" class="md:col-span-2 space-y-4">
+                </div>
+
+            <div class="bg-gray-50 p-6 h-fit border">
+                <h3 class="font-serif text-xl mb-4">Summary</h3>
+                <div class="flex justify-between py-2"><span>Total</span><span id="cart-total" class="font-bold">$0</span></div>
+                <button onclick="alert('Checkout initiated!')" class="w-full bg-dark text-white py-3 mt-4 hover:bg-gold transition">Checkout</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="main.js"></script>
+    <script>
+        function renderCart() {
+            const container = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 italic">Your cart is empty.</p>';
+            } else {
+                container.innerHTML = cart.map((p, index) => `
+                    <div class="flex items-center justify-between border-b pb-4">
+                        <div class="flex items-center gap-4">
+                            <img src="${p.image}" class="w-16 h-16 object-cover">
+                            <p class="font-medium">${p.name}</p>
+                        </div>
+                        <p class="font-bold">$${p.price}</p>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 text-xs hover:underline">Remove</button>
+                    </div>
+                `).join('');
+            }
+            // Update total
+            const total = cart.reduce((sum, p) => sum + p.price, 0);
+            document.getElementById('cart-total').textContent = `$${total}`;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            renderCart();
+        }
+
+        renderCart();
+    </script>
+</body>
+</html>

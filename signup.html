@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up | LuxeJoyas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#1a1a1a',
+                        gold: '#D4AF37'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+    
+    <div class="bg-white p-8 shadow-lg w-full max-w-md border border-gray-200">
+        <h2 class="font-serif text-2xl text-center mb-8">Create Account</h2>
+        
+        <form id="signup-form" onsubmit="processSignup(event)">
+            <div class="mb-4">
+                <label class="block text-sm mb-1">Email</label>
+                <input type="email" id="signup-email" required class="w-full border p-2">
+            </div>
+            <div class="mb-6">
+                <label class="block text-sm mb-1">Password</label>
+                <input type="password" id="signup-pass" required class="w-full border p-2">
+            </div>
+            
+            <button type="submit" class="w-full block bg-dark text-white py-2 hover:bg-gold uppercase tracking-wider border-none">
+    Sign Up
+</button>
+    </form>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        function processSignup(e) {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const pass = document.getElementById('signup-pass').value;
+
+            try {
+                handleSignup(email, pass);
+                alert("Account created successfully!");
+                window.location.href = "login.html"; // Redirect to login
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+    </script>
+</body>
+</html>

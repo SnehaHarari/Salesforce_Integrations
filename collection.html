@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection | LuxeJoyas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { gold: '#D4AF37', goldHover: '#B5952F', dark: '#1a1a1a' },
+                    fontFamily: { sans: ['Lato', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        #toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #1a1a1a;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1000;
+    right: 30px;
+    bottom: 30px;
+}
+#toast.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+@keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+@keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    </style>
+</head>
+<body class="bg-white text-dark font-sans">
+    
+    <header class="h-20 shadow-sm border-b border-gray-100 flex items-center justify-between px-8">
+        <a href="index.html"><h1 class="font-serif text-2xl font-bold">LUXE<span class="text-gold">JOYAS</span></h1></a>
+        <nav class="space-x-8">
+            <a href="index.html">Home</a>
+            <a href="collection.html" class="text-gold">Collection</a>
+            <a href="cart.html">Cart</a>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-12">
+        <div id="toast">Item added to cart!</div>
+        <div class="flex gap-8">
+            <aside class="w-1/4 bg-gray-50 p-6 h-fit">
+                <h3 class="font-serif text-xl mb-6">Filters</h3>
+                <div class="space-y-2">
+                <label class="block"><input type="radio" name="category" value="All" checked onchange="filterProducts(this.value)"> All</label>
+                <label class="block"><input type="radio" name="category" value="Rings" onchange="filterProducts(this.value)"> Rings</label>
+                <label class="block"><input type="radio" name="category" value="Necklaces" onchange="filterProducts(this.value)"> Necklaces</label>
+                <label class="block"><input type="radio" name="category" value="Earrings" onchange="filterProducts(this.value)"> Earrings</label>
+                <label class="block"><input type="radio" name="category" value="Bracelets" onchange="filterProducts(this.value)"> Bracelets</label>
+             </div>
+            </aside>
+            
+            <section class="w-3/4">
+                <h2 class="font-serif text-3xl mb-6" id="cat-title">All Products</h2>
+                <div id="product-container" class="grid grid-cols-3 gap-8">
+                    </div>
+            </section>
+        </div>
+    </main>
+
+   <script src="main.js"></script>
+<script>
+    function renderProductsFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const category = params.get('category') || 'All';
+
+        const radio = document.querySelector(`input[value="${category}"]`);
+        if (radio) radio.checked = true;
+
+        renderProducts(category);
+    }
+
+    window.onload = () => {
+        renderProductsFromUrl();
+    };
+</script>
+</body>
+</html>
