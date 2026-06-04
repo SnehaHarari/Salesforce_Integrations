@@ -260,26 +260,110 @@
     </footer>
 
     <!-- JAVASCRIPT LOGIC -->
-    <script>
-        // --- DATA ---
-        const products = [
-            { id: 1, name: "Diamond Halo Ring", price: 1200, category: "Rings", image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=80" },
-            { id: 2, name: "Gold Chain Pendant", price: 450, category: "Necklaces", image: "https://images.unsplash.com/photo-1599643477877-530eb63abc9e?auto=format&fit=crop&w=800&q=80" },
-            { id: 3, name: "Pearl Drop Earrings", price: 220, category: "Earrings", image: "https://images.unsplash.com/photo-1535632787354-4e68ef0ac584?auto=format&fit=crop&w=800&q=80" },
-            { id: 4, name: "Sapphire Tennis Bracelet", price: 800, category: "Bracelets", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=800&q=80" },
-            { id: 5, name: "Emerald Cut Ring", price: 1500, category: "Rings", image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=80" },
-            { id: 6, name: "Rose Gold Locket", price: 350, category: "Necklaces", image: "https://images.unsplash.com/photo-1599643477877-530eb63abc9e?auto=format&fit=crop&w=800&q=80" },
-            { id: 7, name: "Diamond Stud Earrings", price: 500, category: "Earrings", image: "https://images.unsplash.com/photo-1535632787354-4e68ef0ac584?auto=format&fit=crop&w=800&q=80" },
-            { id: 8, name: "Gold Cuff Bracelet", price: 600, category: "Bracelets", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=800&q=80" }
-        ];
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let currentUser = JSON.parse(localStorage.getItem('user')) || null;
+<script>
+const products = [
+    { id: 1, name: "Diamond Halo Ring", price: 1200, category: "Rings", image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=80" },
+    { id: 2, name: "Gold Chain Pendant", price: 450, category: "Necklaces", image: "https://images.unsplash.com/photo-1599643477877-530eb63abc9e?auto=format&fit=crop&w=800&q=80" },
+    { id: 3, name: "Pearl Drop Earrings", price: 220, category: "Earrings", image: "https://images.unsplash.com/photo-1535632787354-4e68ef0ac584?auto=format&fit=crop&w=800&q=80" },
+    { id: 4, name: "Sapphire Tennis Bracelet", price: 800, category: "Bracelets", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=800&q=80" },
+    { id: 5, name: "Emerald Cut Ring", price: 1500, category: "Rings", image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=80" },
+    { id: 6, name: "Rose Gold Locket", price: 350, category: "Necklaces", image: "https://images.unsplash.com/photo-1599643477877-530eb63abc9e?auto=format&fit=crop&w=800&q=80" },
+    { id: 7, name: "Diamond Stud Earrings", price: 500, category: "Earrings", image: "https://images.unsplash.com/photo-1535632787354-4e68ef0ac584?auto=format&fit=crop&w=800&q=80" },
+    { id: 8, name: "Gold Cuff Bracelet", price: 600, category: "Bracelets", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=800&q=80" }
+];
 
-        // --- ROUTER ---
-        function router(page) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(page).classList.add('active');
-            if (page === 'collection') renderProducts(products);
-            if (page === 'cart') renderCart();
-            if (page === 'login') updateAuthUI();
-        }
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+// --- ROUTER ---
+function router(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(page).classList.add('active');
+    if (page === 'collection') renderProducts(products);
+    if (page === 'cart') renderCart();
+}
+
+// --- PRODUCT & FILTERING ---
+function filterProducts(category) {
+    const filtered = category === 'All' ? products : products.filter(p => p.category === category);
+    renderProducts(filtered, category);
+}
+
+function renderProducts(items, category = 'All') {
+    const list = document.getElementById('product-list');
+    document.getElementById('collection-title').textContent = category === 'All' ? 'All Collections' : category;
+    document.getElementById('product-count').textContent = `${items.length} items`;
+    
+    list.innerHTML = items.map(p => `
+        <div class="border p-4 group">
+            <img src="${p.image}" class="w-full h-64 object-cover mb-4">
+            <h3 class="font-bold font-serif">${p.name}</h3>
+            <p class="text-gold mb-4">$${p.price.toLocaleString()}</p>
+            <button onclick="addToCart(${p.id})" class="w-full bg-dark text-white py-2 hover:bg-gold transition text-sm">Add to Cart</button>
+        </div>
+    `).join('');
+}
+
+// --- CART LOGIC ---
+function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    cart.push(product);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    alert(product.name + " added to cart!");
+}
+
+function updateCartCount() {
+    document.getElementById('cart-count').textContent = cart.length;
+}
+
+function renderCart() {
+    const container = document.getElementById('cart-items');
+    if (cart.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-10">Your cart is empty.</p>';
+    } else {
+        container.innerHTML = cart.map((p, index) => `
+            <div class="flex items-center justify-between border-b pb-4">
+                <div class="flex items-center gap-4">
+                    <img src="${p.image}" class="w-16 h-16 object-cover">
+                    <span>${p.name}</span>
+                </div>
+                <span class="font-bold">$${p.price.toLocaleString()}</span>
+                <button onclick="removeFromCart(${index})" class="text-red-500">Remove</button>
+            </div>
+        `).join('');
+    }
+    calculateTotals();
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    renderCart();
+}
+
+function calculateTotals() {
+    const subtotal = cart.reduce((sum, p) => sum + p.price, 0);
+    const tax = subtotal * 0.08;
+    document.getElementById('cart-subtotal').textContent = `$${subtotal.toLocaleString()}`;
+    document.getElementById('cart-tax').textContent = `$${tax.toFixed(2)}`;
+    document.getElementById('cart-total').textContent = `$${(subtotal + tax).toLocaleString()}`;
+}
+
+// --- AUTH LOGIC ---
+function toggleAuth(type) {
+    document.getElementById('login-form').classList.toggle('hidden', type !== 'login');
+    document.getElementById('signup-form').classList.toggle('hidden', type !== 'signup');
+    document.getElementById('btn-show-login').className = type === 'login' ? "px-4 py-2 border-b-2 border-gold font-serif text-xl mr-4" : "px-4 py-2 border-b-2 border-transparent text-gray-400 font-serif text-xl";
+    document.getElementById('btn-show-signup').className = type === 'signup' ? "px-4 py-2 border-b-2 border-gold font-serif text-xl" : "px-4 py-2 border-b-2 border-transparent text-gray-400 font-serif text-xl";
+}
+
+function handleLogin(e) { e.preventDefault(); alert("Login simulated."); }
+function handleSignup(e) { e.preventDefault(); alert("Signup simulated."); }
+function checkout() { alert("Proceeding to checkout..."); }
+
+// Initialize
+updateCartCount();
+</script>
+</body>
+</html>
