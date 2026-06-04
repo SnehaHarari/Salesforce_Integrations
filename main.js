@@ -9,6 +9,7 @@ const products = [
 // --- 2. STATE ---
 let currentUser = localStorage.getItem('loggedInUser');
 let cart = currentUser ? JSON.parse(localStorage.getItem(`cart_${currentUser}`)) || [] : [];
+let users = JSON.parse(localStorage.getItem('users')) || [{ email: "test@example.com", password: "password123" }];
 
 // --- 3. PRODUCT RENDERING ---
 function renderProducts(category = 'All') {
@@ -17,7 +18,6 @@ function renderProducts(category = 'All') {
     if (!container) return;
 
     title.textContent = category === 'All' ? 'Our Collection' : category;
-    
     const filtered = category === 'All' ? products : products.filter(p => p.category === category);
     
     container.innerHTML = filtered.map(p => `
@@ -32,7 +32,7 @@ function renderProducts(category = 'All') {
 
 function filterProducts(cat) { renderProducts(cat); }
 
-// --- 4. CART & AUTH ---
+// --- 4. CART & AUTH LOGIC ---
 function updateCartCount() {
     const countEl = document.getElementById('cart-count');
     if (countEl) countEl.textContent = cart.length;
@@ -50,6 +50,24 @@ function addToCart(id) {
         updateCartCount();
         alert(`${product.name} added to cart!`);
     }
+}
+
+function handleLogin(email, password) {
+    const user = users.find(u => u.email === email && u.password === password);
+    if (user) {
+        localStorage.setItem('loggedInUser', email);
+        window.location.href = "index.html";
+    } else {
+        throw new Error("Invalid email or password.");
+    }
+}
+
+function handleSignup(email, password) {
+    if (users.find(u => u.email === email)) throw new Error("Account already exists.");
+    users.push({ email, password });
+    localStorage.setItem('users', JSON.stringify(users));
+    alert("Account created! Please log in.");
+    window.location.href = "login.html";
 }
 
 function initAuth() {
