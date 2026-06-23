@@ -99,6 +99,24 @@ function handleSignup(email, password, name, phone) {
     window.location.href = "login.html";
 }
 
+function handleLogin(email, password) {
+    const user = users.find(u => u.email === email && u.password === password);
+    if (user) {
+        localStorage.setItem('loggedInUser', email);
+        window.location.href = "index.html";
+    } else {
+        throw new Error("Invalid email or password.");
+    }
+}
+
+function handleSignup(email, password) {
+    if (users.find(u => u.email === email)) throw new Error("Account already exists.");
+    users.push({ email, password });
+    localStorage.setItem('users', JSON.stringify(users));
+    alert("Account created! Please log in.");
+    window.location.href = "login.html";
+}
+
 function initAuth() {
     const loginLink = document.querySelector('a[href="login.html"]');
     if (currentUser && loginLink) {
@@ -112,32 +130,4 @@ function initAuth() {
 document.addEventListener('DOMContentLoaded', () => {
     updateCartCount();
     initAuth();
-
-    // Signup form listener
-    const signupForm = document.getElementById('signup-form');
-    if (signupForm) {
-       signupForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('signup-name').value;
-    const phone = document.getElementById('signup-phone').value;
-    const email = document.getElementById('signup-email').value;
-    const pass = document.getElementById('signup-pass').value;
-    handleSignup(email, pass, name, phone); // Pass new variables
-});
-    }
-
-    // Login form listener
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            try {
-                handleLogin(email, password);
-            } catch (err) {
-                alert(err.message);
-            }
-        });
-    }
 });
