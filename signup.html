@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up | LuxeJoyas</title>
+    <title>Sign Up | Joya</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -16,43 +16,52 @@
             }
         }
     </script>
+    <script type="text/javascript" src="//cdn.evgnet.com/beacon/cloudodysseyitsolutionsltd/jewellery_dataset/scripts/evergage.min.js"></script>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen">
-    
+<body class="bg-gray-50 text-dark font-sans">     <header class="fixed w-full z-50 bg-white shadow-sm border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex-shrink-0">
+                <h1 class="font-serif text-2xl font-bold tracking-widest"><span class="text-gold">JOYA</span></h1>
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="index.html" class="text-sm font-medium hover:text-gold transition">Home</a>
+                <a href="collection.html" class="text-sm font-medium hover:text-gold transition">Collection</a>
+            </nav>
+            <div class="flex items-center space-x-6">
+                <a href="login.html" class="text-gold"><i class="fas fa-user"></i></a>
+                <a href="cart.html" class="hover:text-gold transition relative">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+       <main class="min-h-screen flex items-center justify-center pt-20 px-4">
+     
     <div class="bg-white p-8 shadow-lg w-full max-w-md border border-gray-200">
-        <h2 class="font-serif text-2xl text-center mb-8">Create Account</h2>
+        <h2 class="font-serif text-2xl text-center mb-8">Sign Up</h2>
         
-        <form id="signup-form" onsubmit="processSignup(event)">
-            <div class="mb-4">
-                <label class="block text-sm mb-1">Email</label>
-                <input type="email" id="signup-email" required class="w-full border p-2">
-            </div>
-            <div class="mb-6">
-                <label class="block text-sm mb-1">Password</label>
-                <input type="password" id="signup-pass" required class="w-full border p-2">
-            </div>
-            
-            <button type="submit" class="w-full block bg-dark text-white py-2 hover:bg-gold uppercase tracking-wider border-none">
-    Sign Up
-</button>
-    </form>
+       <form id="signup-form" class="space-y-4">
+    <div>
+        <label class="block text-sm font-medium">Full Name</label>
+        <input type="text" id="signup-name" required class="w-full border p-2">
     </div>
-
+    <div>
+        <label class="block text-sm font-medium">Phone Number</label>
+        <input type="tel" id="signup-phone" required class="w-full border p-2">
+    </div>
+    <div>
+        <label class="block text-sm font-medium">Email</label>
+        <input type="email" id="signup-email" required class="w-full border p-2">
+    </div>
+    <div>
+        <label class="block text-sm font-medium">Password</label>
+        <input type="password" id="signup-pass" required class="w-full border p-2">
+    </div>
+    <button type="submit" class="w-full bg-dark text-white py-3 mt-4 hover:bg-gold transition">Sign Up</button>
+</form>
+    </div>
+          </main>
     <script src="main.js"></script>
-    <script>
-        function processSignup(e) {
-            e.preventDefault();
-            const email = document.getElementById('signup-email').value;
-            const pass = document.getElementById('signup-pass').value;
-
-            try {
-                handleSignup(email, pass);
-                alert("Account created successfully!");
-                window.location.href = "login.html"; // Redirect to login
-            } catch (err) {
-                alert(err.message);
-            }
-        }
-    </script>
 </body>
 </html>
