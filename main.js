@@ -20,14 +20,15 @@ function renderProducts(category = 'All') {
     title.textContent = category === 'All' ? 'Our Collection' : category;
     const filtered = category === 'All' ? products : products.filter(p => p.category === category);
     
-    container.innerHTML = filtered.map(p => `
-        <div class="border p-4">
-            <img src="${p.image}" class="w-full h-64 object-cover mb-4">
-            <h3 class="font-bold">${p.name}</h3>
-            <p class="text-gold mb-4">$${p.price}</p>
-            <button onclick="addToCart(${p.id})" class="w-full bg-dark text-white py-2 hover:bg-gold transition">Add to Cart</button>
-        </div>
-    `).join('');
+    // In main.js
+container.innerHTML = filtered.map(p => `
+    <div class="border p-4 group">
+        <img src="${p.image}" class="w-full h-64 object-cover mb-4 cursor-pointer" onclick="window.location.href='pdp.html?id=${p.id}'">
+        <h3 class="font-bold">${p.name}</h3>
+        <p class="text-gold mb-4">$${p.price}</p>
+        <button onclick="addToCart(${p.id})" class="w-full bg-dark text-white py-2 hover:bg-gold transition">Add to Cart</button>
+    </div>
+`).join('');
 }
 
 function filterProducts(cat) { renderProducts(cat); }
@@ -50,6 +51,52 @@ function addToCart(id) {
         updateCartCount();
         alert(`${product.name} added to cart!`);
     }
+}
+// Add this to main.js
+function renderCart() {
+    const container = document.getElementById('cart-items');
+    const totalEl = document.getElementById('cart-total');
+    
+    if (!container) return;
+
+    if (cart.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 italic">Your cart is empty.</p>';
+        totalEl.textContent = "$0";
+    } else {
+        container.innerHTML = cart.map((p, index) => `
+            <div class="flex items-center justify-between border-b pb-4">
+                <div class="flex items-center gap-4">
+                    <img src="${p.image}" class="w-16 h-16 object-cover">
+                    <p class="font-medium">${p.name}</p>
+                </div>
+                <p class="font-bold">$${p.price}</p>
+                <button onclick="removeFromCart(${index})" class="text-red-500 text-xs hover:underline">Remove</button>
+            </div>
+        `).join('');
+        
+        const total = cart.reduce((sum, p) => sum + p.price, 0);
+        totalEl.textContent = `$${total}`;
+    }
+}
+function handleLogin(email, password) {
+    const user = users.find(u => u.email === email && u.password === password);
+    if (user) {
+        localStorage.setItem('loggedInUser', email);
+        window.location.href = "index.html";
+    } else {
+        throw new Error("Invalid email or password.");
+    }
+}
+
+function handleSignup(email, password, name, phone) {
+    if (users.find(u => u.email === email)) throw new Error("Account already exists.");
+    
+    // Store the new fields
+    users.push({ email, password, name, phone }); 
+    localStorage.setItem('users', JSON.stringify(users));
+    
+    alert("Account created! Please log in.");
+    window.location.href = "login.html";
 }
 
 function handleLogin(email, password) {
@@ -79,6 +126,7 @@ function initAuth() {
     }
 }
 
+// In main.js - Add this at the bottom
 document.addEventListener('DOMContentLoaded', () => {
     updateCartCount();
     initAuth();

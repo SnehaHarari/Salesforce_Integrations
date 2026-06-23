@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Shopping Cart | LuxeJoyas</title>
+    <title>Shopping Cart | Joya</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="//cdn.evgnet.com/beacon/cloudodysseyitsolutionsltd/jewellery_dataset/scripts/evergage.min.js"></script>
     <style>
@@ -30,7 +30,7 @@
 <body class="bg-white text-dark font-sans">
     
     <header class="h-20 shadow-sm border-b border-gray-100 flex items-center justify-between px-8">
-        <a href="index.html"><h1 class="font-serif text-2xl font-bold">LUXE<span class="text-gold">JOYAS</span></h1></a>
+        <a href="index.html"><h1 class="font-serif text-2xl font-bold"><span class="text-gold">JOYA</span></h1></a>
         <nav class="space-x-8">
             <a href="index.html">Home</a>
             <a href="collection.html">Collection</a>
@@ -54,36 +54,13 @@
     </main>
 
     <script src="main.js"></script>
-    <script>
-        function renderCart() {
-            const container = document.getElementById('cart-items');
-            if (cart.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 italic">Your cart is empty.</p>';
-            } else {
-                container.innerHTML = cart.map((p, index) => `
-                    <div class="flex items-center justify-between border-b pb-4">
-                        <div class="flex items-center gap-4">
-                            <img src="${p.image}" class="w-16 h-16 object-cover">
-                            <p class="font-medium">${p.name}</p>
-                        </div>
-                        <p class="font-bold">$${p.price}</p>
-                        <button onclick="removeFromCart(${index})" class="text-red-500 text-xs hover:underline">Remove</button>
-                    </div>
-                `).join('');
-            }
-            // Update total
-            const total = cart.reduce((sum, p) => sum + p.price, 0);
-            document.getElementById('cart-total').textContent = `$${total}`;
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartCount();
+<script>
+    // Only call the render function defined in main.js
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof renderCart === 'function') {
             renderCart();
         }
-
-        renderCart();
-    </script>
+    });
+</script>
 </body>
 </html>
