@@ -2,18 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Product Details | LuxeJoyas</title>
+    <title>Product Details | Joya</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = { theme: { extend: { colors: { gold: '#D4AF37', dark: '#1a1a1a' } } } }
     </script>
+    <script type="text/javascript" src="//cdn.evgnet.com/beacon/cloudodysseyitsolutionsltd/jewellery_dataset/scripts/evergage.min.js"></script>
 </head>
 <body class="bg-white text-dark font-sans">
 
     <header class="h-20 shadow-sm border-b border-gray-100 flex items-center justify-between px-8">
-        <a href="index.html"><h1 class="font-serif text-2xl font-bold">LUXE<span class="text-gold">JOYAS</span></h1></a>
-        <nav class="space-x-8">
+  <a href="index.html" class="flex-shrink-0">
+            <img src="https://raw.githubusercontent.com/SnehaHarari/Images/refs/heads/main/ChatGPT%20Image%20Jun%2024%2C%202026%2C%2005_18_14%20PM.png?token=GHSAT0AAAAAAEAG66T7R6OQPDJ5Z2UIPOTK2R3Z6RQ" 
+                alt="Joya Logo" 
+                class="h-12 w-auto object-contain">
+        </a>
+                <nav class="space-x-8">
             <a href="index.html">Home</a>
             <a href="collection.html" class="text-gold font-bold">Collection</a>
             <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
@@ -42,22 +47,31 @@
     </main>
 
     <script src="main.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Update cart count in header
-            updateCartCount();
+<script>
+    // Create a function to initialize the PDP
+    async function initPDP() {
+        // Wait until products array is populated (max 3 seconds)
+        let attempts = 0;
+        while (products.length === 0 && attempts < 30) {
+            await new Promise(r => setTimeout(r, 100));
+            attempts++;
+        }
 
-            const params = new URLSearchParams(window.location.search);
-            const id = parseInt(params.get('id'));
-            const product = products.find(p => p.id === id);
-            
-            if (product) {
-                document.getElementById('pdp-image').src = product.image;
-                document.getElementById('pdp-title').textContent = product.name;
-                document.getElementById('pdp-price').textContent = `$${product.price}`;
-                document.getElementById('add-to-cart-btn').onclick = () => addToCart(product.id);
-            }
-        });
-    </script>
+        const params = new URLSearchParams(window.location.search);
+        const id = parseInt(params.get('id'));
+        const product = products.find(p => p.id === id);
+        
+        if (product) {
+            document.getElementById('pdp-image').src = product.image;
+            document.getElementById('pdp-title').textContent = product.name;
+            document.getElementById('pdp-price').textContent = `$${product.price}`;
+            document.getElementById('add-to-cart-btn').onclick = () => addToCart(product.id);
+        } else {
+            document.getElementById('pdp-title').textContent = "Product not found";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initPDP);
+</script>
 </body>
 </html>
