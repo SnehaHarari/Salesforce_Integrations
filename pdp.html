@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Product Details | Joya</title>
+    <title>Product Details | LuxeJoyas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = { theme: { extend: { colors: { gold: '#D4AF37', dark: '#1a1a1a' } } } }
     </script>
-    <script type="text/javascript" src="//cdn.evgnet.com/beacon/cloudodysseyitsolutionsltd/jewellery_dataset/scripts/evergage.min.js"></script>
 </head>
 <body class="bg-white text-dark font-sans">
 
@@ -45,31 +44,22 @@
     </main>
 
     <script src="main.js"></script>
-<script>
-    // Create a function to initialize the PDP
-    async function initPDP() {
-        // Wait until products array is populated (max 3 seconds)
-        let attempts = 0;
-        while (products.length === 0 && attempts < 30) {
-            await new Promise(r => setTimeout(r, 100));
-            attempts++;
-        }
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Update cart count in header
+            updateCartCount();
 
-        const params = new URLSearchParams(window.location.search);
-        const id = parseInt(params.get('id'));
-        const product = products.find(p => p.id === id);
-        
-        if (product) {
-            document.getElementById('pdp-image').src = product.image;
-            document.getElementById('pdp-title').textContent = product.name;
-            document.getElementById('pdp-price').textContent = `$${product.price}`;
-            document.getElementById('add-to-cart-btn').onclick = () => addToCart(product.id);
-        } else {
-            document.getElementById('pdp-title').textContent = "Product not found";
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', initPDP);
-</script>
+            const params = new URLSearchParams(window.location.search);
+            const id = parseInt(params.get('id'));
+            const product = products.find(p => p.id === id);
+            
+            if (product) {
+                document.getElementById('pdp-image').src = product.image;
+                document.getElementById('pdp-title').textContent = product.name;
+                document.getElementById('pdp-price').textContent = `$${product.price}`;
+                document.getElementById('add-to-cart-btn').onclick = () => addToCart(product.id);
+            }
+        });
+    </script>
 </body>
 </html>
