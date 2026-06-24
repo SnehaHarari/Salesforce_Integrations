@@ -1,11 +1,19 @@
-// --- 1. PRODUCT DATA ---
-const products = [
-    { id: 1, name: "Diamond Halo Ring", price: 1200, category: "Rings", image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=80" },
-    { id: 2, name: "Gold Chain Pendant", price: 450, category: "Necklaces", image: "https://images.unsplash.com/photo-1599643477877-530eb63abc9e?auto=format&fit=crop&w=800&q=80" },
-    { id: 3, name: "Pearl Drop Earrings", price: 220, category: "Earrings", image: "https://images.unsplash.com/photo-1535632787354-4e68ef0ac584?auto=format&fit=crop&w=800&q=80" },
-    { id: 4, name: "Sapphire Tennis Bracelet", price: 800, category: "Bracelets", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=800&q=80" }
-];
-
+// Create a variable to hold products
+let products = [];
+// Load products from JSON
+async function loadProducts() {
+    try {
+        const response = await fetch('products.json');
+        products = await response.json();
+        
+        // Render initial products after data is loaded
+        if (document.getElementById('product-container')) {
+            renderProducts('All');
+        }
+    } catch (err) {
+        console.error("Could not load products:", err);
+    }
+}
 // --- 2. STATE ---
 let currentUser = localStorage.getItem('loggedInUser');
 let cart = currentUser ? JSON.parse(localStorage.getItem(`cart_${currentUser}`)) || [] : [];
@@ -78,6 +86,13 @@ function renderCart() {
         totalEl.textContent = `$${total}`;
     }
 }
+// Add this right after the renderCart function
+function removeFromCart(index) {
+    cart.splice(index, 1); // Remove 1 item at the specified index
+    localStorage.setItem(`cart_${currentUser}`, JSON.stringify(cart));
+    renderCart(); // Re-render the cart UI
+    updateCartCount(); // Update the header count
+}
 function handleLogin(email, password) {
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
@@ -110,6 +125,7 @@ function initAuth() {
 
 // In main.js - Add this at the bottom
 document.addEventListener('DOMContentLoaded', () => {
+    loadProducts();
     updateCartCount();
     initAuth();
 
