@@ -97,16 +97,18 @@ function handleLogin(email, password) {
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
         localStorage.setItem('loggedInUser', email);
-        window.location.href = "index.html";
+        // This line performs the actual redirection
+        window.location.href = "index.html"; 
     } else {
         throw new Error("Invalid email or password.");
     }
 }
 
 function handleSignup(email, password, name, phone) {
+    // Check if user exists
     if (users.find(u => u.email === email)) throw new Error("Account already exists.");
     
-    // Store the new fields
+    // Push full user object
     users.push({ email, password, name, phone }); 
     localStorage.setItem('users', JSON.stringify(users));
     

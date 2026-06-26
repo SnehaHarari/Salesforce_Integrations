@@ -45,9 +45,9 @@
             <h2 class="font-serif text-2xl text-center mb-8">Welcome Back</h2>
            <!-- login.html -->
 <form id="login-form" class="space-y-4">
-    <input type="email" id="email" placeholder="Email" required class="w-full p-2 border">
-    <input type="password" id="password" placeholder="Password" required class="w-full p-2 border">
-    <button type="submit" class="w-full bg-dark text-white p-2">Login</button>
+    <input type="email" id="login-email" required class="w-full border p-2">
+    <input type="password" id="login-pass" required class="w-full border p-2">
+    <button type="submit" class="w-full bg-dark text-white py-3">Login</button>
 </form>
             <p class="mt-6 text-center text-sm text-gray-500">
                 Don't have an account? <a href="signup.html" class="text-gold font-bold">Sign Up</a>
@@ -56,5 +56,19 @@
     </main>
 
     <script src="main.js"></script>
+    <script>
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+        e.preventDefault(); // This is crucial: it stops the form from reloading the page
+        
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-pass').value;
+
+        try {
+            handleLogin(email, password); // This calls the function in your main.js
+        } catch (err) {
+            alert(err.message);
+        }
+    });
+</script>
 </body>
 </html>

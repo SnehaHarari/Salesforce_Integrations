@@ -63,5 +63,22 @@
     </div>
           </main>
     <script src="main.js"></script>
+    <script>
+    document.getElementById('signup-form').addEventListener('submit', (e) => {
+        e.preventDefault(); // Stop page refresh
+        
+        const name = document.getElementById('signup-name').value;
+        const phone = document.getElementById('signup-phone').value;
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-pass').value;
+
+        try {
+            // Note: Update your handleSignup function in main.js to accept these 4 parameters
+            handleSignup(email, password, name, phone);
+        } catch (err) {
+            alert(err.message);
+        }
+    });
+</script>
 </body>
 </html>
