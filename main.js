@@ -5,10 +5,15 @@ async function loadProducts() {
     try {
         const response = await fetch('products.json');
         products = await response.json();
+        window.products = products; // ADD THIS LINE
         
-        // Render initial products after data is loaded
         if (document.getElementById('product-container')) {
             renderProducts('All');
+        }
+
+        // Trigger IS to re-read catalog data after products load
+        if (window.SalesforceInteractions) {
+            SalesforceInteractions.reinit();
         }
     } catch (err) {
         console.error("Could not load products:", err);
