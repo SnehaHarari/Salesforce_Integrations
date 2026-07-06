@@ -1,12 +1,12 @@
-// Create a variable to hold products
+// --- 1. PRODUCT LOADING ---
 let products = [];
-// Load products from JSON
+
 async function loadProducts() {
     try {
         const response = await fetch('products.json');
         products = await response.json();
-        window.products = products; // ADD THIS LINE
-        
+        window.products = products;
+
         if (document.getElementById('product-container')) {
             renderProducts('All');
         }
@@ -19,6 +19,7 @@ async function loadProducts() {
         console.error("Could not load products:", err);
     }
 }
+
 // --- 2. STATE ---
 let currentUser = localStorage.getItem('loggedInUser');
 let cart = currentUser ? JSON.parse(localStorage.getItem(`cart_${currentUser}`)) || [] : [];
@@ -32,21 +33,22 @@ function renderProducts(category = 'All') {
 
     title.textContent = category === 'All' ? 'Our Collection' : category;
     const filtered = category === 'All' ? products : products.filter(p => p.category === category);
-    
-    // In main.js
-container.innerHTML = filtered.map(p => `
-    <div class="border p-4 group">
-        <img src="${p.image}" class="w-full h-64 object-cover mb-4 cursor-pointer" onclick="window.location.href='pdp.html?id=${p.id}'">
-        <h3 class="font-bold">${p.name}</h3>
-        <p class="text-gold mb-4">$${p.price}</p>
-        <button onclick="addToCart(${p.id})" class="w-full bg-dark text-white py-2 hover:bg-gold transition">Add to Cart</button>
-    </div>
-`).join('');
+
+    container.innerHTML = filtered.map(p => `
+        <div class="border p-4 group">
+            <img src="${p.image}" class="w-full h-64 object-cover mb-4 cursor-pointer" onclick="window.location.href='pdp.html?id=${p.id}'">
+            <h3 class="font-bold">${p.name}</h3>
+            <p class="text-gold mb-4">$${p.price}</p>
+            <button onclick="addToCart(${p.id})" class="w-full bg-dark text-white py-2 hover:bg-gold transition">Add to Cart</button>
+        </div>
+    `).join('');
 }
 
-function filterProducts(cat) { renderProducts(cat); }
+function filterProducts(cat) {
+    renderProducts(cat);
+}
 
-// --- 4. CART & AUTH LOGIC ---
+// --- 4. CART LOGIC ---
 function updateCartCount() {
     const countEl = document.getElementById('cart-count');
     if (countEl) countEl.textContent = cart.length;
@@ -65,11 +67,11 @@ function addToCart(id) {
         alert(`${product.name} added to cart!`);
     }
 }
-// Add this to main.js
+
 function renderCart() {
     const container = document.getElementById('cart-items');
     const totalEl = document.getElementById('cart-total');
-    
+
     if (!container) return;
 
     if (cart.length === 0) {
@@ -86,41 +88,20 @@ function renderCart() {
                 <button onclick="removeFromCart(${index})" class="text-red-500 text-xs hover:underline">Remove</button>
             </div>
         `).join('');
-        
+
         const total = cart.reduce((sum, p) => sum + p.price, 0);
         totalEl.textContent = `$${total}`;
     }
 }
-// Add this right after the renderCart function
+
 function removeFromCart(index) {
-    cart.splice(index, 1); // Remove 1 item at the specified index
+    cart.splice(index, 1);
     localStorage.setItem(`cart_${currentUser}`, JSON.stringify(cart));
-    renderCart(); // Re-render the cart UI
-    updateCartCount(); // Update the header count
-}
-function handleLogin(email, password) {
-    const user = users.find(u => u.email === email && u.password === password);
-    if (user) {
-        localStorage.setItem('loggedInUser', email);
-        // This line performs the actual redirection
-        window.location.href = "index.html"; 
-    } else {
-        throw new Error("Invalid email or password.");
-    }
+    renderCart();
+    updateCartCount();
 }
 
-function handleSignup(email, password, name, phone) {
-    // Check if user exists
-    if (users.find(u => u.email === email)) throw new Error("Account already exists.");
-    
-    // Push full user object
-    users.push({ email, password, name, phone }); 
-    localStorage.setItem('users', JSON.stringify(users));
-    
-    alert("Account created! Please log in.");
-    window.location.href = "login.html";
-}
-
+// --- 5. AUTH LOGIC (single, correct versions only) ---
 function handleLogin(email, password) {
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
@@ -131,9 +112,9 @@ function handleLogin(email, password) {
     }
 }
 
-function handleSignup(email, password) {
+function handleSignup(email, password, name, phone) {
     if (users.find(u => u.email === email)) throw new Error("Account already exists.");
-    users.push({ email, password });
+    users.push({ email, password, name, phone });
     localStorage.setItem('users', JSON.stringify(users));
     alert("Account created! Please log in.");
     window.location.href = "login.html";
@@ -148,7 +129,7 @@ function initAuth() {
     }
 }
 
-// In main.js - Add this at the bottom
+// --- 6. INIT ---
 document.addEventListener('DOMContentLoaded', () => {
     loadProducts();
     updateCartCount();
