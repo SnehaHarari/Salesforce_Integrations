@@ -46,6 +46,18 @@ function renderProducts(category = 'All') {
 
 function filterProducts(cat) {
     renderProducts(cat);
+
+    // Reflect the selected category in the URL (no page reload)
+    const url = new URL(window.location);
+    if (cat === 'All') {
+        url.searchParams.delete('category');
+    } else {
+        url.searchParams.set('category', cat);
+    }
+    window.history.replaceState({}, '', url);
+
+    // Notify the Personalization sitemap that the category changed
+    document.dispatchEvent(new CustomEvent("categoryChanged", { detail: { category: cat } }));
 }
 
 // --- 4. CART LOGIC ---
