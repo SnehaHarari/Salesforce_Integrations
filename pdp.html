@@ -71,8 +71,9 @@
             document.getElementById('pdp-price').textContent = `$${product.price}`;
             document.getElementById('add-to-cart-btn').onclick = () => addToCart(product.id);
 
-            // ADD THIS LINE — tells the Personalization config it's safe to send the pdp event now
-            document.dispatchEvent(new Event("productReady"));
+    // Set a flag AND dispatch the event, so we're covered either way
+    window.__productReady = true;
+    document.dispatchEvent(new Event("productReady"));  
 
         } else {
             document.getElementById('pdp-title').textContent = "Product not found";
