@@ -70,6 +70,10 @@
             document.getElementById('pdp-title').textContent = product.name;
             document.getElementById('pdp-price').textContent = `$${product.price}`;
             document.getElementById('add-to-cart-btn').onclick = () => addToCart(product.id);
+
+            // ADD THIS LINE — tells the Personalization config it's safe to send the pdp event now
+            document.dispatchEvent(new Event("productReady"));
+
         } else {
             document.getElementById('pdp-title').textContent = "Product not found";
         }
