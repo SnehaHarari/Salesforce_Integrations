@@ -129,7 +129,7 @@ function handleSignup(email, password, name, phone) {
     users.push({ email, password, name, phone });
     localStorage.setItem('users', JSON.stringify(users));
     alert("Account created! Please log in.");
-    window.location.href = "login.html";
+   return newUser; // no alert/redirect here anymore
 }
 
 function initAuth() {
