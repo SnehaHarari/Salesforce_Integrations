@@ -1,6 +1,20 @@
 // --- 1. PRODUCT LOADING ---
 let products = [];
 
+async function loadProducts() {
+    try {
+        const response = await fetch('products.json');
+        products = await response.json();
+        window.products = products;
+
+        if (document.getElementById('product-container')) {
+            renderProducts('All');
+        }
+        // reinit() removed — sitemap.js already waits for window.products itself
+    } catch (err) {
+        console.error("Could not load products:", err);
+    }
+}
 
 // --- 2. STATE ---
 let currentUser = localStorage.getItem('loggedInUser');
