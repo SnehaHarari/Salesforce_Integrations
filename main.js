@@ -126,10 +126,10 @@ function handleLogin(email, password) {
 
 function handleSignup(email, password, name, phone) {
     if (users.find(u => u.email === email)) throw new Error("Account already exists.");
-    users.push({ email, password, name, phone });
+    const newUser = { email, password, name, phone };
+    users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
-    alert("Account created! Please log in.");
-   return newUser; // no alert/redirect here anymore
+    return newUser; // no alert here — sitemap.js handles the alert + redirect after tracking succeeds
 }
 
 function initAuth() {
