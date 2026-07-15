@@ -35,7 +35,7 @@ function renderProducts(category = 'All') {
             <img src="${p.image}" class="w-full h-64 object-cover mb-4 cursor-pointer" onclick="window.location.href='pdp.html?id=${p.id}'">
             <h3 class="font-bold">${p.name}</h3>
             <p class="text-gold mb-4">$${p.price}</p>
-            <button onclick="addToCart(${p.id})" class="w-full bg-dark text-white py-2 hover:bg-gold transition">Add to Cart</button>
+            <button onclick="addToCart(${p.id})" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" class="w-full bg-dark text-white py-2 hover:bg-gold transition">Add to Cart</button>
         </div>
     `).join('');
 }
