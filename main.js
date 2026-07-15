@@ -118,7 +118,7 @@ function handleLogin(email, password) {
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
         localStorage.setItem('loggedInUser', email);
-        window.location.href = "index.html";
+         return user; // return user info instead of redirecting here
     } else {
         throw new Error("Invalid email or password.");
     }
